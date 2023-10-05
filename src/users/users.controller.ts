@@ -10,9 +10,16 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/iam/authentication/decorators/auth.decorator';
+import { AuthType } from 'src/iam/authentication/enums/auth-type.enum';
+import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
+import { Role } from './enums/role.enum';
 
 @ApiTags('Users')
+@ApiBearerAuth('jwt')
+@Auth(AuthType.Bearer)
+@Roles(Role.Admin)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
