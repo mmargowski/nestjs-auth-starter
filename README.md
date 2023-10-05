@@ -28,14 +28,12 @@ Additionally this projects adds the following functionality:
 http://localhost:3000/api
 ```
 
-````
-
 ## Installation
 
 ```bash
 $ npm install
 $ docker-compose up -d
-````
+```
 
 ## Running the app
 
