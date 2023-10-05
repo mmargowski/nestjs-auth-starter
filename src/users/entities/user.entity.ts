@@ -7,8 +7,6 @@ import {
 } from 'typeorm';
 import { Role } from '../enums/role.enum';
 
-import { ApiKey } from '../api-keys/entities/api-key.entity';
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -31,8 +29,4 @@ export class User {
 
   @Column({ nullable: true })
   tfaSecret: string;
-
-  @JoinTable()
-  @OneToMany((type) => ApiKey, (apiKey) => apiKey.user)
-  apiKeys: ApiKey[];
 }

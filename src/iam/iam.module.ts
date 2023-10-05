@@ -13,15 +13,13 @@ import { AuthenticationGuard } from './authentication/guards/authentication.guar
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
 import { RolesGuard } from './authorization/guard/roles.guard';
-import { ApiKeysService } from './authentication/api-keys.service';
-import { ApiKey } from 'src/users/api-keys/entities/api-key.entity';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
 import { OtpAuthenticationService } from './authentication/otp-authentication.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, ApiKey]),
+    TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
@@ -38,7 +36,6 @@ import { OtpAuthenticationService } from './authentication/otp-authentication.se
     AuthenticationService,
     AccessTokenGuard,
     RefreshTokenIdsStorage,
-    ApiKeysService,
     GoogleAuthenticationService,
     OtpAuthenticationService,
   ],
