@@ -28,7 +28,9 @@ Additionally this projects adds the following functionality:
 
 You can use the `@Auth()` decorator to enforce authentication on a route. This will check if the user is authenticated and if the user has a valid JWT token. If the user is not authenticated or the JWT token is invalid, a `401 Unauthorized` response will be returned.
 
--`AuthType.None`: Makes a route public -`AuthType.Bearer`: Required the `Authorization: Bearer <token>` header
+-`AuthType.None`: Makes a route public
+
+-`AuthType.Bearer`: Required the `Authorization: Bearer <token>` header
 
 ```typescript
 @Auth(AuthType.Bearer)
