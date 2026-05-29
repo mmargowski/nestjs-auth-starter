@@ -4,8 +4,4 @@ export class ActivateTfaDto {
   @IsNotEmpty()
   @IsString()
   code: string;
-
-  @IsNotEmpty()
-  @IsString()
-  secret: string;
 }

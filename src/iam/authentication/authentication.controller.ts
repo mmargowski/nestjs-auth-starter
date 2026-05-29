@@ -53,24 +53,21 @@ export class AuthenticationController {
     @ActiveUser() activeUser: ActiveUserData,
     @Res() response: Response,
   ) {
-    const { secret, uri } = await this.otpAuthService.generateSecret(
-      activeUser.email,
-    );
-    response.set('x-tfa-secret', secret);
+    const { uri } = await this.otpAuthService.generateSecret(activeUser.email);
     response.type('png');
     return toFileStream(response, uri);
   }
 
   @Auth(AuthType.Bearer)
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Post('2fa/activate')
   async activateTfa(
     @ActiveUser() activeUser: ActiveUserData,
     @Body() activateTfaDto: ActivateTfaDto,
   ) {
     await this.otpAuthService.activateTfa(
+      activeUser.sub,
       activeUser.email,
-      activateTfaDto.secret,
       activateTfaDto.code,
     );
   }
