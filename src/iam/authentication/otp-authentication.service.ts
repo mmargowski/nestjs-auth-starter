@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { authenticator } from 'otplib';
@@ -26,7 +26,15 @@ export class OtpAuthenticationService {
     return authenticator.verify({ token: code, secret });
   }
 
-  async enableTfaForUser(email: string, secret: string) {
+  async activateTfa(email: string, secret: string, code: string) {
+    const isValid = this.verifyCode(code, secret);
+    if (!isValid) {
+      throw new UnauthorizedException('Invalid 2FA code');
+    }
+    await this.enableTfaForUser(email, secret);
+  }
+
+  private async enableTfaForUser(email: string, secret: string) {
     const { id } = await this.userRepository.findOneOrFail({
       where: { email },
       select: { id: true },

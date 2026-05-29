@@ -1,7 +1,8 @@
+import { ConfigService } from '@nestjs/config';
 import { RefreshTokenIdsStorage } from './refresh-token-ids.storage';
 
 describe('RefreshTokenIdsStorage', () => {
   it('should be defined', () => {
-    expect(new RefreshTokenIdsStorage()).toBeDefined();
+    expect(new RefreshTokenIdsStorage({} as ConfigService)).toBeDefined();
   });
 });

@@ -4,23 +4,31 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IamModule } from './iam/iam.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ExampleResourceModule } from './exampleResource/exampleResource.module';
+import databaseConfig from './iam/config/database.config';
+import redisConfig from './iam/config/redis.config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      load: [databaseConfig, redisConfig],
+    }),
     ExampleResourceModule,
     UsersModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5555,
-      username: 'postgres',
-      password: 'pass123',
-      database: 'postgres',
-      autoLoadEntities: true,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('database.host'),
+        port: configService.get<number>('database.port'),
+        username: configService.get<string>('database.user'),
+        password: configService.get<string>('database.password'),
+        database: configService.get<string>('database.name'),
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
     }),
     IamModule,
   ],

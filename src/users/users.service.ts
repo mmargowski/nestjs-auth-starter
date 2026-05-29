@@ -32,12 +32,14 @@ export class UsersService {
     id: number,
     updateUserDto: UpdateUserDto,
   ): Promise<User | undefined> {
-    const user = this.findOne(id);
+    const user = await this.userRepository.preload({
+      id,
+      ...updateUserDto,
+    });
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
-    await this.userRepository.update(id, updateUserDto);
-    return this.findOne(id);
+    return this.userRepository.save(user);
   }
 
   async remove(id: number): Promise<User | undefined> {
