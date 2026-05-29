@@ -18,6 +18,7 @@ import { OtpAuthenticationService } from './otp-authentication.service';
 import { toFileStream } from 'qrcode';
 import { SignInDto } from './dto/sign-in.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { ActivateTfaDto } from './dto/activate-tfa.dto';
 
 @ApiTags('Authentication')
 @Auth(AuthType.None)
@@ -52,11 +53,22 @@ export class AuthenticationController {
     @ActiveUser() activeUser: ActiveUserData,
     @Res() response: Response,
   ) {
-    const { secret, uri } = await this.otpAuthService.generateSecret(
-      activeUser.email,
-    );
-    await this.otpAuthService.enableTfaForUser(activeUser.email, secret);
+    const { uri } = await this.otpAuthService.generateSecret(activeUser.email);
     response.type('png');
     return toFileStream(response, uri);
+  }
+
+  @Auth(AuthType.Bearer)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('2fa/activate')
+  async activateTfa(
+    @ActiveUser() activeUser: ActiveUserData,
+    @Body() activateTfaDto: ActivateTfaDto,
+  ) {
+    await this.otpAuthService.activateTfa(
+      activeUser.sub,
+      activeUser.email,
+      activateTfaDto.code,
+    );
   }
 }

@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
+import { TfaSecretStorage } from './authentication/tfa-secret.storage';
 import { RolesGuard } from './authorization/guard/roles.guard';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
@@ -36,6 +37,7 @@ import { OtpAuthenticationService } from './authentication/otp-authentication.se
     AuthenticationService,
     AccessTokenGuard,
     RefreshTokenIdsStorage,
+    TfaSecretStorage,
     GoogleAuthenticationService,
     OtpAuthenticationService,
   ],
